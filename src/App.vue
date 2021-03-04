@@ -179,12 +179,17 @@
         </tr>
         <br />
         <button
+         
+          :disabled="disabled"
           id="button"
           type="button"
           class="btn btn-success btn-lg"
-          v-on:click="saveMail()"
+          @click="saveMail"
+          
+          
         >
-          Save
+          <div v-if="loading" ><div class="spinner-border spinner-border-md"></div></div>
+          <span v-else> Send </span>
         </button>
       </table>
     </div>
@@ -197,13 +202,16 @@ import axios from "axios";
 export default {
   data() {
     return {
-      url: process.env.VUE_APP_API_ENDPOINT || '/',
+      url: process.env.VUE_APP_API_ENDPOINT || "/",
       mail: "",
       customer: "",
       versionExplanation: [],
       content: [],
       firstTitle: "",
       version: "",
+      loading: false,
+      disabled: false,
+      
     };
   },
 
@@ -231,6 +239,8 @@ export default {
          this.content = textareaValue.split('\n');
        }, */
 
+     
+
     saveMail() {
       console.log("email: ", this.mail);
       console.log("content: ", this.content.split("\n"));
@@ -238,6 +248,8 @@ export default {
       console.log("Customer Message : ", this.versionExplanation.split("\n"));
       console.log("first title: ", this.firstTitle);
       console.log("version title", this.version);
+      document.getElementById("button").disabled = true;
+      this.loading = true    
       axios
         .post(`${this.url}/sendMail`, {
           mail: this.mail,
@@ -246,14 +258,28 @@ export default {
           firstTitle: this.firstTitle,
           customer: this.customer,
           version: this.version,
+          
         })
-        .then((response) => (this.responseData = response.data))
+        .then((response) =>  
+          this.$swal({icon: 'success',
+          text: 'Mail sent',
+          title: 'Completed'}, (this.responseData = response.data), ))
         .catch((error) => {
-          this.errorMessage = error.message;
+         this.$swal({icon: 'error',
+         text: 'Mail did not send, please try again',
+         title: 'Ups',
+         },(this.errorMessage = error.message));
           console.error("There was a error", error);
+        }).finally(() =>{
+          this.loading = false    
+          document.getElementById("button").disabled = false;
         });
     },
+    
+   
   },
+
+
 
   /* watch:{
       content(){
