@@ -15,7 +15,7 @@
                 >
                   <a href="https://www.pixselect.com.tr">
                     <img
-                      src="https://www.pixselect.com.tr/images/logos/logo.png"
+                      src="https://www.pixselect.com.tr/assets/img/pixselect_logo.png"
                       width="180"
                       alt="Logo"
                       title="Logo"
@@ -52,14 +52,13 @@
                   <label class="p-1" for="mail">
                     <strong>To whom : </strong>
                   </label>
-
-                  <input
-                    type="email "
-                    class="mail"
+                  <textarea
+                    class="content"
                     v-model="mail"
                     placeholder="user@example.com"
-                    size="65"
-                  />
+                    rows="5"
+                    cols="67"
+                  ></textarea>
                 </td>
               </tr>
             </table>
@@ -203,7 +202,7 @@ export default {
   data() {
     return {
       url: process.env.VUE_APP_API_ENDPOINT || "/",
-      mail: "",
+      mail: [],
       customer: "",
       versionExplanation: [],
       content: [],
@@ -242,7 +241,7 @@ export default {
      
 
     saveMail() {
-      console.log("email: ", this.mail);
+      console.log("email: ", this.mail.split("\n"));
       console.log("content: ", this.content.split("\n"));
       console.log("Customer", this.customer);
       console.log("Customer Message : ", this.versionExplanation.split("\n"));
@@ -263,11 +262,12 @@ export default {
         .then((response) =>  
           this.$swal({icon: 'success',
           text: 'Mail sent',
-          title: 'Completed'}, (this.responseData = response.data), ))
+          title: 'Completed',
+          },(this.responseData = response.data), ))
         .catch((error) => {
          this.$swal({icon: 'error',
          text: 'Mail did not send, please try again',
-         title: 'Ups',
+         title: 'Upsss',
          },(this.errorMessage = error.message));
           console.error("There was a error", error);
         }).finally(() =>{
@@ -321,7 +321,7 @@ export default {
 }
 
 .content {
-  text-transform: capitalize;
+  
   width: 100%;
 }
 
