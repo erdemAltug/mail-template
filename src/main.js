@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import App from './App.vue'
-import VueSweetalert2 from 'vue-sweetalert2';
-
-import 'sweetalert2/dist/sweetalert2.min.css'
+import router from './router'
 
 
 Vue.config.productionTip = false
+// main.js file
+const $cookies = require('vue-cookies')
+Vue.use($cookies)
 
-Vue.use(VueSweetalert2);
 
 new Vue({
-  render: h => h(App),
+  router,
+  render: h => h(App)
 }).$mount('#app')
